@@ -1,0 +1,28 @@
+version: "3.7"
+services:
+  nexus:
+    image: sonatype/nexus3:3.24.0
+    container_name: nexus
+    restart: always
+    ports:
+      - "8081:8081"
+      - "8443:8443"
+      - "18442:18442"
+      - "18443:18443"
+      - "18444:18444"
+    networks:
+      - nexus-in
+      - nexus-out
+    volumes:
+      - nexus-data:/nexus-data
+      - ./etc:/nexus-data/etc
+      - ./jetty:/opt/sonatype/nexus/etc/jetty
+networks:
+  nexus-in:
+    name: nexus-in
+    driver: bridge
+  nexus-out:
+    name: nexus-out
+    driver: overlay
+volumes:
+  nexus-data:
