@@ -1,0 +1,41 @@
+version: "3.7"
+services:
+  nexus:
+    image: sonatype/nexus3:3.24.0
+    container_name: nexus
+    restart: always
+    ports:
+      - "8081:8081"
+      - "18442:18442"
+      - "18443:18443"
+      - "18444:18444"
+    networks:
+      - nexus-in
+      - nexus-out
+    volumes:
+      - nexus-data:/nexus-data
+  httpd:
+    image: httpd:2.4.43
+    container_name: httpd
+    restart: always
+    ports:
+      - "8443:8443"
+      - "18445:18445"
+    networks:
+      - nexus-in
+      - nexus-out
+    depends_on:
+      - nexus
+    volumes:
+      - ./httpd.conf:/usr/local/apache2/conf/httpd.conf
+      - ./conf.d:/usr/local/apache2/conf.d
+      - ./ssl:/usr/local/apache2/ssl
+networks:
+  nexus-in:
+    name: nexus-in
+    driver: bridge
+  nexus-out:
+    name: nexus-out
+    driver: overlay
+volumes:
+  nexus-data:
