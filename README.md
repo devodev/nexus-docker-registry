@@ -85,6 +85,9 @@ Create a docker-group with:
 ## Search an image on newly created docker-group
 
 ```bash
+# Method 1
+docker search nexus:18444/postgres
+# Method 2
 docker search nexus:18445/postgres
 ```
 
